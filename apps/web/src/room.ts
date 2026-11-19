@@ -16,6 +16,7 @@ function loadPlates():Promise<Plates>{
 }
 const clamp=(x:number)=>Math.max(0,Math.min(1,x));
 const smooth=(x:number)=>x*x*(3-2*x);
+const crowdScale=1.3225;
 const positions=[[541,351],[490,357],[443,368],[305,342],[340,390],[415,340],
   [686,347],[808,389],[602,412],[299,454],[212,492],[746,481]];
 
@@ -46,7 +47,7 @@ export function buildHall(stage:Container,art:Plates){
       const p=smooth(walk)*(1-smooth(leave));
       const depth=334+(y-334)*p;
       root.position.set(57+(x-57)*p,depth);root.zIndex=depth+i*.0001;
-      root.scale.set(.62+(depth-318)*.0033);
+      root.scale.set(crowdScale*(.62+(depth-318)*.0033));
       const dir=leave>0?-1:1;
       pose(time,pulse,dir>0?p:1-p,strides,(x-57)/strides/root.scale.x*192/62,
         dir*(y-334)/strides/root.scale.y*256/82,dir);
@@ -55,7 +56,9 @@ export function buildHall(stage:Container,art:Plates){
 }
 export async function openRoom(host:HTMLElement,getArt=loadPlates) {
   const art=await getArt(),app=new Application();
-  await app.init({width:1000,height:563,resolution:Math.min(1.6,globalThis.devicePixelRatio||1),
+  // Match the fullscreen cover scale, bounded even on a high-DPI monitor.
+  const cover=Math.max(1,(globalThis.innerWidth||1000)/1000,(globalThis.innerHeight||563)/563);
+  await app.init({width:1000,height:563,resolution:Math.min(1.75,cover*(globalThis.devicePixelRatio||1)),
     antialias:true,preference:'webgl',backgroundColor:0x18130f,autoStart:false,sharedTicker:false});
   // Textures belong to the shared asset cache, not to an individual night.
   const dispose=()=>app.destroy({removeView:true},{children:true,context:true,texture:false,textureSource:false});
