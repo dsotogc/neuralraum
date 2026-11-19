@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#191a17">
+<title>Neuralraum — Hall 01</title>
+<link rel="stylesheet" href="/src/style.css">
+<main>
+  <section id="cover" aria-labelledby="title">
+    <div class="poster">
+      <h1 id="title">Neural<wbr>raum<span>.</span></h1>
+      <div class="plate" aria-hidden="true">
+        <div class="driver"></div><div class="driver"></div>
+      </div>
+    </div>
+    <aside>
+      <button id="pick" class="primary">Select an MP3 <b aria-hidden="true">↗</b></button>
+      <div id="coverPanel"></div>
+      <details><summary>How it works</summary><p>Your MP3 plays locally. A temporary copy is sent for bass and beat analysis, then deleted on completion, failure or cancellation. MP3 only, up to 300 MB per set.</p></details>
+    </aside>
+  </section>
+  <section id="club" hidden aria-label="Industrial hall">
+    <div id="view" role="img" aria-label="Elevated view of a concrete hall, side entrance, dancers and wall of speakers">
+      <div class="pass left"></div><div class="pass right"></div>
+    </div>
+    <div id="hud"><div class="transport"><button id="toggle">Pause</button><span id="time"></span>
+      <button id="replace">Replace track ↗</button><button id="leave">Leave</button></div><div id="clubPanel"></div></div>
+  </section>
+  <div id="panel" hidden>
+    <div id="filename"></div>
+    <div class="meter"><span>01 / Upload</span><strong id="upload"></strong></div>
+    <div class="meter"><span>02 / Analysis</span><strong id="analysis"></strong></div>
+    <div class="actions"><button id="enter" hidden>Enter hall →</button><button id="retry" hidden>Retry analysis</button><button id="cancel">Cancel</button></div>
+  </div>
+  <p id="message" role="status"></p>
+  <input id="file" type="file" accept=".mp3,audio/mpeg" hidden>
+</main>
+<script type="module" src="/src/main.ts"></script>
+</html>
