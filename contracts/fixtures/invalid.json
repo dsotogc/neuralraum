@@ -1,0 +1,8 @@
+{
+  "oversized":{"name":"large.mp3","size_bytes":300000001},
+  "unsupported":{"name":"fake.wav","size_bytes":2048},
+  "prematureRelease":{"id":"aa000000-0000-4000-8000-000000000002","state":"analyzing","analysis_fraction":null,"released":true,"error":null},
+  "unsorted":{"version":1,"duration_s":4,"beats":[{"time_s":2,"low_energy":0.3},{"time_s":1,"low_energy":0.4}]},
+  "atEnd":{"version":1,"duration_s":4,"beats":[{"time_s":4,"low_energy":0.5}]},
+  "unscaled":{"version":1,"duration_s":4,"beats":[{"time_s":0,"low_energy":1.1}]}
+}

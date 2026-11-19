@@ -1,0 +1,15 @@
+{
+  "create":{"name":"night.MP3","size_bytes":300000000},
+  "public":[
+    {"id":"aa000000-0000-4000-8000-000000000001","state":"uploading","size_bytes":300000000,"upload_received_bytes":75000000,"analysis_fraction":null,"error":null},
+    {"id":"aa000000-0000-4000-8000-000000000001","state":"queued","size_bytes":300000000,"upload_received_bytes":300000000,"analysis_fraction":null,"error":null},
+    {"id":"aa000000-0000-4000-8000-000000000001","state":"analyzing","size_bytes":300000000,"upload_received_bytes":300000000,"analysis_fraction":0.5,"error":null},
+    {"id":"aa000000-0000-4000-8000-000000000001","state":"succeeded","size_bytes":300000000,"upload_received_bytes":300000000,"analysis_fraction":1,"error":null}
+  ],
+  "workerCancel":[
+    {"id":"aa000000-0000-4000-8000-000000000002","state":"cancelling","released":false,"analysis_fraction":null,"error":null},
+    {"id":"aa000000-0000-4000-8000-000000000002","state":"cancelled","released":true,"analysis_fraction":null,"error":null}
+  ],
+  "failed":{"id":"aa000000-0000-4000-8000-000000000001","state":"failed","size_bytes":300000000,"upload_received_bytes":300000000,"analysis_fraction":null,"error":{"code":"analysis_failed","message":"MP3 decoding failed."}},
+  "rejected":{"error":{"code":"too_large","message":"300000001 bytes exceeds the limit of 300000000 bytes."}}
+}

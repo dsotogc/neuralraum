@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Timeline",
+  "type": "object", "additionalProperties": false,
+  "required": ["version", "duration_s", "beats"],
+  "properties": {
+    "version": {"const": 1},
+    "duration_s": {"type": "number", "exclusiveMinimum": 0},
+    "beats": {"type": "array", "items": {
+      "type": "object", "additionalProperties": false,
+      "required": ["time_s", "low_energy"],
+      "properties": {
+        "time_s": {"type": "number", "minimum": 0},
+        "low_energy": {"type": "number", "minimum": 0, "maximum": 1}
+      }
+    }}
+  }
+}

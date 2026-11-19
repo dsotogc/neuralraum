@@ -1,0 +1,9 @@
+# Timeline v1 and late delivery
+
+`version:1`, `duration_s` and each `time_s` use decoded playback seconds, zero at the start of the local MP3 on the native media clock. Compensate analysis window centering, chunk offsets and decoder delay when mapping frames; do not add network, entrance or analysis latency. Beats are finite, strictly increasing, unique and inside `[0,duration_s)`. An empty `beats` array is valid. No extrapolated tempo pulses or section labels.
+
+`low_energy` measures low-band energy local to that beat (target 30–150 Hz around the attack), scaled monotonically to `[0,1]`: silence/no measurable bass = 0, strong bass approaches 1. Gate absolute silence **before** normalization; do not normalize each beat or chunk to its own maximum. Preserve weak/strong contrast. A silent track returns no beats or exclusively zero weights.
+
+On the first and every following render, binary-search for the last beat with `time_s <= audio.currentTime`. No such beat, no timeline, or ended audio: displacement zero. Example envelope: `low_energy * max(0, 1 - (currentTime - time_s)/0.16)`; scale to the scene's cone excursion. Never fire old callbacks to catch up. With `fixtures/pulse.json`, at 3.04 s use the beat at 3.00 (0.9 × 0.75 = 0.675); at 3.25 s return zero. The weak beat at 1.00 gives 0.075 at 1.04 s. Optionally fade in first displacement briefly on the audio clock.
+
+Keep the scene DJ-only before success or on analysis failure. Start the crowd entrance schedule at the **current audio time when result is adopted** (or when entry starts if already ready). Introduce individuals/groups through the door over subsequent playback seconds; never reconstruct missed arrivals. Freeze all scene state during pause, including entrance, DJ gesture and adopting a result that would change the frozen frame. Resume from the unchanged audio clock; no wall-time catch-up. Retry leaves the same local media element and time intact.

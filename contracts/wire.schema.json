@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "oneOf": [
+    {"$ref":"#/$defs/Create"}, {"$ref":"#/$defs/Status"},
+    {"$ref":"#/$defs/WorkerStatus"}, {"$ref":"#/$defs/ErrorResponse"}
+  ],
+  "$defs": {
+    "id":{"type":"string","pattern":"^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"},
+    "size":{"type":"integer","minimum":1,"maximum":300000000},
+    "Create":{
+      "type":"object","additionalProperties":false,"required":["name","size_bytes"],
+      "properties":{"name":{"type":"string","minLength":1,"pattern":"\\.[mM][pP]3$"},"size_bytes":{"$ref":"#/$defs/size"}}
+    },
+    "Error":{
+      "type":"object","additionalProperties":false,"required":["code","message"],
+      "properties":{
+        "code":{"enum":["invalid_request","too_large","unsupported_audio","unknown_job","invalid_state","not_ready","unavailable","upload_interrupted","analysis_failed"]},
+        "message":{"type":"string","minLength":1}
+      }
+    },
+    "ErrorResponse":{
+      "type":"object","additionalProperties":false,"required":["error"],"properties":{"error":{"$ref":"#/$defs/Error"}}
+    },
+    "common":{
+      "type":"object","required":["id","state","analysis_fraction","error"],
+      "properties":{
+        "id":{"$ref":"#/$defs/id"},
+        "state":{"enum":["uploading","queued","analyzing","cancelling","succeeded","failed","cancelled"]},
+        "analysis_fraction":{"type":["number","null"],"minimum":0,"maximum":1},
+        "error":{"oneOf":[{"type":"null"},{"$ref":"#/$defs/Error"}]}
+      },
+      "allOf":[
+        {"if":{"properties":{"state":{"const":"failed"}}},"then":{"properties":{"error":{"$ref":"#/$defs/Error"}}},"else":{"properties":{"error":{"type":"null"}}}},
+        {"if":{"properties":{"state":{"const":"succeeded"}}},"then":{"properties":{"analysis_fraction":{"const":1}}},"else":{"properties":{"analysis_fraction":{"exclusiveMaximum":1}}}},
+        {"if":{"properties":{"state":{"enum":["uploading","queued","cancelling","failed","cancelled"]}}},"then":{"properties":{"analysis_fraction":{"type":"null"}}}}
+      ]
+    },
+    "Status":{
+      "$ref":"#/$defs/common","unevaluatedProperties":false,"required":["size_bytes","upload_received_bytes"],
+      "properties":{"size_bytes":{"$ref":"#/$defs/size"},"upload_received_bytes":{"type":"integer","minimum":0,"maximum":300000000}}
+    },
+    "WorkerStatus":{
+      "$ref":"#/$defs/common","unevaluatedProperties":false,"required":["released"],
+      "properties":{"released":{"type":"boolean"},"state":{"not":{"const":"uploading"}}},
+      "if":{"properties":{"state":{"enum":["succeeded","failed","cancelled"]}}},
+      "then":{"properties":{"released":{"const":true}}},"else":{"properties":{"released":{"const":false}}}
+    }
+  }
+}
